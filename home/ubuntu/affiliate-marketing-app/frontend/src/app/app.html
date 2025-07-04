@@ -1,0 +1,108 @@
+<mat-sidenav-container class="app-container">
+  <!-- Side Navigation -->
+  <mat-sidenav #sidenav mode="over" class="app-sidenav">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/home" (click)="sidenav.close()">
+        <mat-icon matListItemIcon>home</mat-icon>
+        <span matListItemTitle>Home</span>
+      </a>
+      
+      <a mat-list-item routerLink="/products" (click)="sidenav.close()" *ngIf="isAuthenticated$ | async">
+        <mat-icon matListItemIcon>shopping_cart</mat-icon>
+        <span matListItemTitle>Products</span>
+      </a>
+      
+      <div *ngIf="isAffiliate">
+        <mat-divider></mat-divider>
+        <h3 matSubheader>Affiliate</h3>
+        <a mat-list-item routerLink="/affiliate/dashboard" (click)="sidenav.close()">
+          <mat-icon matListItemIcon>dashboard</mat-icon>
+          <span matListItemTitle>Dashboard</span>
+        </a>
+        <a mat-list-item routerLink="/affiliate/referrals" (click)="sidenav.close()">
+          <mat-icon matListItemIcon>link</mat-icon>
+          <span matListItemTitle>Referral Links</span>
+        </a>
+        <a mat-list-item routerLink="/affiliate/commissions" (click)="sidenav.close()">
+          <mat-icon matListItemIcon>monetization_on</mat-icon>
+          <span matListItemTitle>Commissions</span>
+        </a>
+        <a mat-list-item routerLink="/affiliate/analytics" (click)="sidenav.close()">
+          <mat-icon matListItemIcon>analytics</mat-icon>
+          <span matListItemTitle>Analytics</span>
+        </a>
+      </div>
+      
+      <div *ngIf="isAdmin">
+        <mat-divider></mat-divider>
+        <h3 matSubheader>Admin</h3>
+        <a mat-list-item routerLink="/admin/dashboard" (click)="sidenav.close()">
+          <mat-icon matListItemIcon>admin_panel_settings</mat-icon>
+          <span matListItemTitle>Admin Dashboard</span>
+        </a>
+        <a mat-list-item routerLink="/admin/products" (click)="sidenav.close()">
+          <mat-icon matListItemIcon>inventory</mat-icon>
+          <span matListItemTitle>Manage Products</span>
+        </a>
+        <a mat-list-item routerLink="/admin/affiliates" (click)="sidenav.close()">
+          <mat-icon matListItemIcon>people</mat-icon>
+          <span matListItemTitle>Affiliates</span>
+        </a>
+        <a mat-list-item routerLink="/admin/applications" (click)="sidenav.close()">
+          <mat-icon matListItemIcon>assignment</mat-icon>
+          <span matListItemTitle>Applications</span>
+        </a>
+        <a mat-list-item routerLink="/admin/commissions" (click)="sidenav.close()">
+          <mat-icon matListItemIcon>account_balance</mat-icon>
+          <span matListItemTitle>Commissions</span>
+        </a>
+      </div>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content>
+    <!-- Top Navigation Bar -->
+    <mat-toolbar color="primary" class="app-toolbar">
+      <button mat-icon-button (click)="sidenav.toggle()" class="menu-button">
+        <mat-icon>menu</mat-icon>
+      </button>
+      
+      <span class="app-title" routerLink="/home">{{ title }}</span>
+      
+      <span class="spacer"></span>
+      
+      <!-- User Menu -->
+      <div *ngIf="isAuthenticated$ | async; else authButtons">
+        <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
+          <mat-icon>account_circle</mat-icon>
+          <span *ngIf="userProfile$ | async as profile">{{ profile.displayName || profile.email }}</span>
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        
+        <mat-menu #userMenu="matMenu">
+          <a mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>Profile</span>
+          </a>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="signOut()">
+            <mat-icon>logout</mat-icon>
+            <span>Sign Out</span>
+          </button>
+        </mat-menu>
+      </div>
+      
+      <ng-template #authButtons>
+        <a mat-button routerLink="/login" class="auth-button">Sign In</a>
+        <a mat-raised-button color="accent" routerLink="/register" class="auth-button">Sign Up</a>
+      </ng-template>
+    </mat-toolbar>
+
+    <!-- Page Content -->
+    <main class="app-content">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

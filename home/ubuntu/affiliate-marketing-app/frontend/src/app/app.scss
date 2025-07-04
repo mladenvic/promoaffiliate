@@ -1,0 +1,127 @@
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.menu-button {
+  margin-right: 16px;
+}
+
+.user-menu-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  .mat-icon {
+    margin: 0;
+  }
+}
+
+.auth-button {
+  margin-left: 8px;
+}
+
+.app-sidenav {
+  width: 280px;
+  
+  .mat-mdc-nav-list {
+    padding-top: 0;
+  }
+  
+  .mat-mdc-list-item {
+    height: 48px;
+    
+    .mat-icon {
+      margin-right: 16px;
+      color: rgba(0, 0, 0, 0.54);
+    }
+  }
+  
+  .mat-subheader {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.54);
+    padding: 16px 16px 8px;
+    margin: 0;
+  }
+}
+
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  background-color: #fafafa;
+  min-height: calc(100vh - 64px);
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .app-content {
+    padding: 16px;
+  }
+  
+  .app-title {
+    font-size: 1rem;
+  }
+  
+  .user-menu-button span {
+    display: none;
+  }
+}
+
+// Material theme customizations
+.mat-mdc-toolbar {
+  &.mat-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+}
+
+.mat-mdc-raised-button.mat-accent {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+// Loading and transition animations
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

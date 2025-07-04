@@ -1,0 +1,105 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return request.auth.token.admin == true;
+    }
+    
+    function isAffiliate() {
+      return request.auth.token.affiliate == true;
+    }
+    
+    function hasRole(role) {
+      return request.auth.token.role == role;
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (isOwner(userId) || isAdmin());
+      allow create: if isAuthenticated() && isOwner(userId);
+      allow update: if isAuthenticated() && (isOwner(userId) || isAdmin());
+      allow delete: if isAdmin();
+    }
+    
+    // Products collection
+    match /products/{productId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Affiliate applications collection
+    match /affiliateApplications/{applicationId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && request.auth.uid == resource.data.userId;
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Affiliates collection
+    match /affiliates/{affiliateId} {
+      allow read: if isAuthenticated() && (isOwner(affiliateId) || isAdmin());
+      allow create: if isAdmin();
+      allow update: if isAuthenticated() && (isOwner(affiliateId) || isAdmin());
+      allow delete: if isAdmin();
+    }
+    
+    // Referrals collection
+    match /referrals/{referralId} {
+      allow read: if isAuthenticated() && (resource.data.affiliateId == request.auth.uid || isAdmin());
+      allow create: if true; // Allow creation from tracking functions
+      allow update: if true; // Allow updates from conversion tracking
+      allow delete: if isAdmin();
+    }
+    
+    // Commissions collection
+    match /commissions/{commissionId} {
+      allow read: if isAuthenticated() && (resource.data.affiliateId == request.auth.uid || isAdmin());
+      allow create: if true; // Allow creation from conversion tracking
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Payouts collection
+    match /payouts/{payoutId} {
+      allow read: if isAuthenticated() && (resource.data.affiliateId == request.auth.uid || isAdmin());
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Marketing materials collection
+    match /marketingMaterials/{materialId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Analytics collection (for storing aggregated data)
+    match /analytics/{docId} {
+      allow read: if isAuthenticated() && (isAdmin() || (isAffiliate() && resource.data.affiliateId == request.auth.uid));
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // System configuration collection
+    match /config/{configId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+}
+

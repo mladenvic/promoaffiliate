@@ -1,0 +1,96 @@
+<div class="home-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Grow Your Income with 
+        <span class="gradient-text">Affiliate Marketing</span>
+      </h1>
+      <p class="hero-subtitle">
+        Join our platform and start earning commissions by promoting products you love. 
+        Track your performance, manage referrals, and get paid seamlessly.
+      </p>
+      
+      <div class="hero-actions" *ngIf="!authService.isAuthenticated">
+        <a mat-raised-button color="primary" routerLink="/register" class="cta-button">
+          Get Started Free
+        </a>
+        <a mat-button routerLink="/login" class="secondary-button">
+          Sign In
+        </a>
+      </div>
+      
+      <div class="hero-actions" *ngIf="authService.isAuthenticated">
+        <a mat-raised-button color="primary" routerLink="/products" class="cta-button">
+          Browse Products
+        </a>
+        <a mat-button routerLink="/affiliate/dashboard" class="secondary-button" *ngIf="authService.isAffiliate">
+          Go to Dashboard
+        </a>
+        <a mat-button routerLink="/affiliate/apply" class="secondary-button" *ngIf="!authService.isAffiliate && !authService.isAdmin">
+          Become an Affiliate
+        </a>
+      </div>
+    </div>
+    
+    <div class="hero-image">
+      <div class="hero-graphic">
+        <mat-icon class="hero-icon">trending_up</mat-icon>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="section-header">
+      <h2>Why Choose Our Platform?</h2>
+      <p>Everything you need to succeed in affiliate marketing</p>
+    </div>
+    
+    <div class="features-grid">
+      <mat-card class="feature-card" *ngFor="let feature of features">
+        <mat-card-content>
+          <div class="feature-icon">
+            <mat-icon>{{ feature.icon }}</mat-icon>
+          </div>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="stats-container">
+      <div class="stat-item">
+        <h3>10,000+</h3>
+        <p>Active Affiliates</p>
+      </div>
+      <div class="stat-item">
+        <h3>$2M+</h3>
+        <p>Commissions Paid</p>
+      </div>
+      <div class="stat-item">
+        <h3>500+</h3>
+        <p>Products Available</p>
+      </div>
+      <div class="stat-item">
+        <h3>99.9%</h3>
+        <p>Uptime</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section" *ngIf="!authService.isAuthenticated">
+    <div class="cta-content">
+      <h2>Ready to Start Earning?</h2>
+      <p>Join thousands of successful affiliates and start monetizing your audience today.</p>
+      <a mat-raised-button color="accent" routerLink="/register" class="cta-button-large">
+        Start Your Journey
+      </a>
+    </div>
+  </section>
+</div>
+
